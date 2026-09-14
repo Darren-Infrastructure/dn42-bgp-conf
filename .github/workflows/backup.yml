@@ -9,10 +9,10 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  backup-old-delete:
+  backup:
     # The type of runner that the job will run on
     runs-on: [self-hosted, dn42]
-    name: Deleting old backup
+    name: Backing Up Configs
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -20,23 +20,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Delete old backup
         run: rm -rf /tmp/bird-back
-  backup-dir-create:
-    # The type of runner that the job will run on
-    runs-on: [self-hosted, dn42]
-    name: Creating backup dir
-    needs: backup-old-delete
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
       - name: Creating backup directory
         run: mkdir -p /tmp/bird-back
-  backup:
-    # The type of runner that the job will run on
-    runs-on: [self-hosted, dn42]
-    name: Backing up configs
-    needs: backup-dir-create
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
       - name: Copy to backup
         run: cp -r /etc/bird/* /tmp/bird-back
