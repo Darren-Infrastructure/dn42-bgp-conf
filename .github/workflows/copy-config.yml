@@ -9,9 +9,10 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  backup:
+  deploy:
     # The type of runner that the job will run on
     runs-on: [self-hosted, dn42]
+    name: Deploy
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -20,4 +21,4 @@ jobs:
       - name: Deploying config
         run: cp -r $GITHUB_WORKSPACE /etc/bird
       - name: Validate config
-        run: birdc -p
+        run: bird -p
