@@ -18,5 +18,9 @@ jobs:
     steps:
 
       # Runs a single command using the runners shell
-      - name: Backup the config
-        run: rm -rf /tmp/bird-back && mkdir -p /tmp/bird-back && cp -r /etc/bird/* /tmp/bird-back
+      - name: Delete old backup
+        run: rm -rf /tmp/bird-back
+      - name: Creating backup directory
+        run: mkdir -p /tmp/bird-back
+      - name: Copy to backup
+        run: cp -r /etc/bird/* /tmp/bird-back
