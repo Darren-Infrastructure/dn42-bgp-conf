@@ -30,4 +30,4 @@ jobs:
     steps:
       # Runs a single command using the runners shell
       - name: Backup the old config
-        uses: $/.github/workflows/backup.yml
+        uses: Darren-Infrastructure/dn42-bgp-global-conf/.github/workflows/backup.yml@main
