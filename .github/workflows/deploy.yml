@@ -19,18 +19,8 @@ jobs:
       matrix:
         target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
         
-    uses: Codex-/return-dispatch@v4.0.1
-    with:
-      # GitHub Personal Access Token for making API requests.
-      token: ${{ github.token }}
-      # The git reference for the workflow. The reference can be a branch or tag name.
-      ref: ${{ github.repository }}
-      # Repository of the action to dispatch.
-      repo: ${{ github.repository }}
-      # Owner of the given repository.
-      owner: ${{ github.repository }}
-      # Workflow to return an ID for. Can be the ID or the workflow filename.
-      workflow: "test"
-      # A flat JSON object, only supports strings, numbers, and booleans (as per workflow inputs API).
-      workflow_inputs: "{target: ${{ matrix.target-runners }}}"
+    name: Starter
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/run-deploy.yml@main
 
+    with:
+      target: ${{ matrix.target-runners }}
