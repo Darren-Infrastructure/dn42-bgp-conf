@@ -10,7 +10,6 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   backup:
-    name: Backup old configs
     # The type of runner that the job will run on
     runs-on: [self-hosted, dn42]
 
