@@ -33,6 +33,9 @@ jobs:
     needs: checkout
     name: Backup
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup.yml@main
+
+    with:
+      target: ${{ matrix.target-runners }}
   
   deploy:
     strategy:
@@ -42,6 +45,9 @@ jobs:
     needs: backup
     name: Deploy
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/copy-config.yml@main
+
+    with:
+      target: ${{ matrix.target-runners }}
   
   backup-delete:
     strategy:
@@ -51,3 +57,6 @@ jobs:
     needs: deploy
     if: success()
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
+
+    with:
+      target: ${{ matrix.target-runners }}
