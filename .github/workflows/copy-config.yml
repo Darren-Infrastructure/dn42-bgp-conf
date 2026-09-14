@@ -34,4 +34,4 @@ jobs:
 
       
       - name: Applying Config
-        run: birdc configure
+        run: birdc configure && exit 1
