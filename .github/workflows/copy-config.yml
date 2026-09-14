@@ -1,0 +1,23 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy Config to Prod
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+  workflow_call:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  backup:
+    # The type of runner that the job will run on
+    runs-on: [self-hosted, dn42]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      # Runs a single command using the runners shell
+      - name: Deploying config
+        run: cp -r $GITHUB_WORKSPACE /etc/bird
+      - name: Validate config
+        run: birdc -p
