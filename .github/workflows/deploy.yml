@@ -15,6 +15,7 @@ on:
 jobs:
   checkout:
    name: Checkout
+   environment: bgp-prod
 
    runs-on: ${{ vars.BGP_SERVERS }}
    
