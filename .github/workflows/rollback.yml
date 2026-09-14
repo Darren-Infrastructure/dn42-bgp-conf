@@ -1,0 +1,25 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Rollback Backup
+
+# Controls when the workflow will run
+on:
+  workflow_call:
+    inputs:
+      target:
+        required: true
+        type: string
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  backup-rollback:
+    # The type of runner that the job will run on
+    runs-on: ${{ inputs.target }}
+    name: Rolling back to backup
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      # Runs a single command using the runners shell
+      - name: Rolling back to backup
+        run: mv /tmp/bird-back/* /etc/bird
