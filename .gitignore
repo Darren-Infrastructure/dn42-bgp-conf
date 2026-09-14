@@ -1,7 +1,15 @@
 roa/*
+!roa/.gitkeep
+
 peers/extended_hop/*
+!peers/extended_hop/.gitkeep
+
 peers/ipv4/*
+!peers/ipv4/.gitkeep
+
 peers/ipv6/*
+!peers/ipv6/.gitkeep
+
 peers/proto_comms.conf
 asn-num.conf
 bird-vars.conf
