@@ -13,98 +13,15 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  checkout:
-   name: Checkout
-   environment: bgp-prod
-   strategy:
-      matrix:
-        target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
-
-   runs-on: [self-hosted, "${{ matrix.target-runners }}"]
-   
-   steps:
-       - name: Checking out the repo
-         uses: actions/checkout@v4
-         with:
-            clean: true
-  backup:
+  call-deploy:
     strategy:
       fail-fast: false
       matrix:
         target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
         
-    needs: checkout
     name: Backup
-    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup.yml@main
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/run-deploy.yml@main
 
     with:
       target: ${{ matrix.target-runners }}
 
-  validate-config:
-    strategy:
-      fail-fast: false
-      matrix:
-        target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
-        
-    needs: backup
-    name: Validate Config
-    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/validate-config.yml@main
-
-    with:
-      target: ${{ matrix.target-runners }}
-
-  backup-delete:
-    strategy:
-      fail-fast: false
-      matrix:
-        target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
-    name: Delete backup after failed pre-apply validation
-        
-    needs: validate-config
-    if: failure()
-    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
-
-    with:
-      target: ${{ matrix.target-runners }}
-  
-  deploy:
-    strategy:
-      fail-fast: false
-      matrix:
-        target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
-        
-    needs: validate-config
-    if: success()
-    name: Deploy
-    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/copy-config.yml@main
-
-    with:
-      target: ${{ matrix.target-runners }}
-  
-  backup-delete-after-deploy:
-    strategy:
-      fail-fast: false
-      matrix:
-        target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
-    name: Delete backup after successfull deploy
-        
-    needs: deploy
-    if: success()
-    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
-
-    with:
-      target: ${{ matrix.target-runners }}
-
-  rollback-after-deploy-fail:
-    strategy:
-      fail-fast: false
-      matrix:
-        target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
-    name: Rollback after unsuccessfull deploy
-        
-    needs: deploy
-    if: failure()
-    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/rollback.yml@main
-
-    with:
-      target: ${{ matrix.target-runners }}

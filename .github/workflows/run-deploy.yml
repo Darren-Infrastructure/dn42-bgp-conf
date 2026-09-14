@@ -1,0 +1,77 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      target:
+        required: true
+        type: string
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  checkout:
+   name: Checkout
+
+   runs-on: [self-hosted, "${{ inputs.target }}"]
+   
+   steps:
+       - name: Checking out the repo
+         uses: actions/checkout@v4
+         with:
+            clean: true
+  backup:
+    needs: checkout
+    name: Backup
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup.yml@main
+
+    with:
+      target: ${{ inputs.target }}
+
+  validate-config:   
+    needs: backup
+    name: Validate Config
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/validate-config.yml@main
+
+    with:
+      target: ${{ inputs.target }}
+
+  backup-delete:
+    name: Delete backup after failed pre-apply validation
+        
+    needs: validate-config
+    if: failure()
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
+
+    with:
+      target: ${{ inputs.target }}
+  
+  deploy:
+    needs: validate-config
+    if: success()
+    name: Deploy
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/copy-config.yml@main
+
+    with:
+      target: ${{ inputs.target }}
+  
+  backup-delete-after-deploy:
+    name: Delete backup after successfull deploy
+        
+    needs: deploy
+    if: success()
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
+
+    with:
+      target: ${{ inputs.target }}
+
+  rollback-after-deploy-fail:
+    name: Rollback after unsuccessfull deploy
+        
+    needs: deploy
+    if: failure()
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/rollback.yml@main
+
+    with:
+      target: ${{ inputs.target }}
