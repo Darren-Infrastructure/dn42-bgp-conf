@@ -26,14 +26,37 @@ jobs:
        - name: Checking out the repo
          uses: actions/checkout@v4
   backup:
+    strategy:
+      matrix:
+        target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
+        
     needs: checkout
     name: Backup
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup.yml@main
+
+    with:
+      target: ${{ matrix.target-runners }}
+  
   deploy:
+    strategy:
+      matrix:
+        target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
+        
     needs: backup
     name: Deploy
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/copy-config.yml@main
+
+    with:
+      target: ${{ matrix.target-runners }}
+  
   backup-delete:
+    strategy:
+      matrix:
+        target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
+        
     needs: deploy
     if: success()
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
+
+    with:
+      target: ${{ matrix.target-runners }}

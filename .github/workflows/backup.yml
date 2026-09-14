@@ -5,12 +5,16 @@ name: Backup
 # Controls when the workflow will run
 on:
   workflow_call:
+    inputs:
+      target:
+        required: true
+        type: string
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   backup:
     # The type of runner that the job will run on
-    runs-on: [self-hosted, dn42]
+    runs-on: ${{ inputs.target }}
     name: Backing Up Configs
 
     # Steps represent a sequence of tasks that will be executed as part of the job
