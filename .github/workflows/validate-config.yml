@@ -5,17 +5,21 @@ name: Validating Config
 # Controls when the workflow will run
 on:
   workflow_call:
+    inputs:
+      target:
+        required: true
+        type: string
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   validate-config:
     # The type of runner that the job will run on
-    runs-on: [self-hosted, dn42]
+    runs-on: ${{ inputs.target }}
     name: Applying Config
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
 
       
-      - name: Applying Config
+      - name: Validating Config
         run: cd $GITHUB_WORKSPACE && bird -p $GITHUB_WORKSPACE/bird.conf
