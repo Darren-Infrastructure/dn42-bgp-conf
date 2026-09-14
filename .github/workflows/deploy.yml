@@ -53,6 +53,7 @@ jobs:
     strategy:
       matrix:
         target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
+    name: Delete backup after failed pre-apply validation
         
     needs: validate-config
     if: failure()
@@ -78,6 +79,7 @@ jobs:
     strategy:
       matrix:
         target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
+    name: Delete backup after successfull deploy
         
     needs: deploy
     if: success()
