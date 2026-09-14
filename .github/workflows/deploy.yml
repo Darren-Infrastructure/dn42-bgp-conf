@@ -23,4 +23,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Backup the config
-        uses: ./.github/workflows/backup.yml
+        uses: backup.yml
