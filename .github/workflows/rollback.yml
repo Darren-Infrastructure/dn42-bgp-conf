@@ -29,13 +29,3 @@ jobs:
         run: chown -R bird /etc/bird
       - name: Applying Rollback Config
         run: birdc config
-
-  backup-delete-after-rollback:
-    name: Delete backup after rollback
-        
-    needs: backup-rollback
-    if: success()
-    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
-
-    with:
-      target: ${{ inputs.target }}
