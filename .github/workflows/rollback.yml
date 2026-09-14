@@ -24,6 +24,8 @@ jobs:
       - name: Delete Bad Config
         run: rm -rf /etc/bird/*
       - name: Rolling back to backup
-        run: mv /tmp/bird-back/* /etc/bird
+        run: cp -a /tmp/bird-back/* /etc/bird
+      - name: Fix ownership after rollback
+        run: chown -R bird /etc/bird
       - name: Applying Rollback Config
         run: birdc config
