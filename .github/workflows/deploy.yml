@@ -17,7 +17,7 @@ jobs:
    name: Checkout
    environment: servers
 
-   runs-on: "{{ env.BGP_SERVERS }}"
+   runs-on: ${{ vars.BGP_SERVERS }}
    
    steps:
        - name: Checking out the repo
