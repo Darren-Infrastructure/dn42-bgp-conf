@@ -21,6 +21,8 @@ jobs:
     steps:
 
       # Runs a single command using the runners shell
+      - name: Delete Bad Config
+        run: rm -rf /etc/bird/*
       - name: Rolling back to backup
         run: mv /tmp/bird-back/* /etc/bird
       - name: Applying Rollback Config
