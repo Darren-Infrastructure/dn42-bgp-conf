@@ -18,7 +18,7 @@ jobs:
    environment: bgp-prod
    strategy:
       matrix:
-        target-runners: ${{ vars.BGP_SERVERS }}
+        target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
 
    runs-on: [self-hosted, "${{ matrix.target-runners }}"]
    
