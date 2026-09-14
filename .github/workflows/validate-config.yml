@@ -1,0 +1,22 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Validating Config
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+  workflow_call:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  validate-config:
+    # The type of runner that the job will run on
+    runs-on: [self-hosted, dn42]
+    name: Applying Config
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      
+      - name: Applying Config
+        run: cd $GITHUB_WORKSPACE && bird -p $GITHUB_WORKSPACE/bird.conf
