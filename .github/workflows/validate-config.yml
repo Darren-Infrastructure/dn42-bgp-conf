@@ -12,14 +12,27 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  pre-validate:
+      name: Pre-validation conditioning
+      runs-on: ${{ inputs.target }}
+
+      steps:
+        - name: Copy vars file to the correct place
+          run: |
+            cp /etc/bird/asn-num.conf $GITHUB_WORKSPACE
+            cp /etc/bird/bird-vars.conf $GITHUB_WORKSPACE
+            cp /etc/bird/configs/ipv4/vars.conf $GITHUB_WORKSPACE/configs/ipv4
+            cp /etc/bird/configs/ipv6/vars.conf $GITHUB_WORKSPACE/configs/ipv6
+            cp /etc/bird/peers/proto_comms.conf $GITHUB_WORKSPACE/peers
+            cp -r /etc/bird/roa/* $GITHUB_WORKSPACE/roa
+      
   validate-config:
     # The type of runner that the job will run on
     runs-on: ${{ inputs.target }}
     name: Validating Config
+    needs: pre-validate
 
     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-
-      
+    steps:   
       - name: Validating Config
         run: cd $GITHUB_WORKSPACE && bird -c $GITHUB_WORKSPACE/bird.conf -p
