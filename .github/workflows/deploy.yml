@@ -15,7 +15,6 @@ on:
 jobs:
   checkout:
    name: Checkout
-   environment: servers
 
    runs-on: ${{ vars.BGP_SERVERS }}
    
