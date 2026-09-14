@@ -15,8 +15,9 @@ on:
 jobs:
   checkout:
    name: Checkout
+   environment: servers
 
-   runs-on: [self-hosted, dn42]
+   runs-on: "{{ env.BGP_SERVERS }}"
    
    steps:
        - name: Checking out the repo
