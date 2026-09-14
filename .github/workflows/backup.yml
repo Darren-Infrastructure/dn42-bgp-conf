@@ -22,6 +22,7 @@ jobs:
   backup-dir-create:
     # The type of runner that the job will run on
     runs-on: [self-hosted, dn42]
+    needs: backup-old-delete
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -30,6 +31,7 @@ jobs:
   backup:
     # The type of runner that the job will run on
     runs-on: [self-hosted, dn42]
+    needs: backup-dir-create
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
