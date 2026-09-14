@@ -29,6 +29,7 @@ jobs:
             clean: true
   backup:
     strategy:
+      fail-fast: false
       matrix:
         target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
         
@@ -41,6 +42,7 @@ jobs:
 
   validate-config:
     strategy:
+      fail-fast: false
       matrix:
         target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
         
@@ -53,6 +55,7 @@ jobs:
 
   backup-delete:
     strategy:
+      fail-fast: false
       matrix:
         target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
     name: Delete backup after failed pre-apply validation
@@ -66,6 +69,7 @@ jobs:
   
   deploy:
     strategy:
+      fail-fast: false
       matrix:
         target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
         
@@ -79,6 +83,7 @@ jobs:
   
   backup-delete-after-deploy:
     strategy:
+      fail-fast: false
       matrix:
         target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
     name: Delete backup after successfull deploy
@@ -92,6 +97,7 @@ jobs:
 
   rollback-after-deploy-fail:
     strategy:
+      fail-fast: false
       matrix:
         target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
     name: Rollback after unsuccessfull deploy
