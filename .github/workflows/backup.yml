@@ -1,0 +1,21 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Backup
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  backup:
+    name: Backup old configs
+    # The type of runner that the job will run on
+    runs-on: [self-hosted, dn42]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      # Runs a single command using the runners shell
+      - name: Backup the config
+        run: rm -rf /tmp/bird-back && mkdir -p /tmp/bird-back && cp -r /etc/bird/* /tmp/bird-back
