@@ -22,4 +22,4 @@ jobs:
 
       
       - name: Validating Config
-        run: cd $GITHUB_WORKSPACE && bird -p $GITHUB_WORKSPACE/bird.conf
+        run: cd $GITHUB_WORKSPACE && bird -c $GITHUB_WORKSPACE/bird.conf -p
