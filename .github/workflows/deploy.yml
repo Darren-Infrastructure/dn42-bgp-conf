@@ -102,3 +102,15 @@ jobs:
 
     with:
       target: ${{ matrix.target-runners }}
+
+  backup-delete-after-rollback:
+    strategy:
+      matrix:
+        target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
+    name: Delete backup after rollback
+        
+    needs: rollback-after-deploy-fail
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
+
+    with:
+      target: ${{ matrix.target-runners }}
