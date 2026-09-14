@@ -23,3 +23,5 @@ jobs:
       # Runs a single command using the runners shell
       - name: Rolling back to backup
         run: mv /tmp/bird-back/* /etc/bird
+      - name: Applying Rollback Config
+        run: birdc config
