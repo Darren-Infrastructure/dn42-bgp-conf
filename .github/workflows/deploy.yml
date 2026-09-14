@@ -22,6 +22,5 @@ jobs:
        - name: Checking out the repo
          uses: actions/checkout@v4
   backup:
-    name: Backup old configs
     needs: checkout
     uses: Darren-Infrastructure/dn42-bgp-global-conf/.github/workflows/backup.yml@main
