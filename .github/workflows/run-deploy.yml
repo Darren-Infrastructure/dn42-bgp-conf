@@ -75,3 +75,14 @@ jobs:
 
     with:
       target: ${{ inputs.target }}
+
+  delete-backup-after-rollback:
+    name: Delete backup after sucessfull rollback
+        
+    needs: rollback-after-deploy-fail
+    if: success()
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
+
+    with:
+      target: ${{ inputs.target }}
+  
