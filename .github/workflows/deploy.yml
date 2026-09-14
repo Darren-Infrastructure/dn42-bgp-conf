@@ -36,20 +36,45 @@ jobs:
 
     with:
       target: ${{ matrix.target-runners }}
+
+  validate-config:
+    strategy:
+      matrix:
+        target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
+        
+    needs: backup
+    name: Validate Config
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/validate-config.yml@main
+
+    with:
+      target: ${{ matrix.target-runners }}
+
+  backup-delete:
+    strategy:
+      matrix:
+        target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
+        
+    needs: validate-config
+    if: failure()
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
+
+    with:
+      target: ${{ matrix.target-runners }}
   
   deploy:
     strategy:
       matrix:
         target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
         
-    needs: backup
+    needs: validate-config
+    if: success()
     name: Deploy
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/copy-config.yml@main
 
     with:
       target: ${{ matrix.target-runners }}
   
-  backup-delete:
+  backup-delete-after-deploy:
     strategy:
       matrix:
         target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
