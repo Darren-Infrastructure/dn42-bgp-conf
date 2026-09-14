@@ -25,9 +25,4 @@ jobs:
     name: Backup old configs
     # The type of runner that the job will run on
     runs-on: [self-hosted, dn42]
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Runs a single command using the runners shell
-      - name: Backup the old config
-        uses: Darren-Infrastructure/dn42-bgp-global-conf/.github/workflows/backup.yml@main
+    uses: Darren-Infrastructure/dn42-bgp-global-conf/.github/workflows/backup.yml@main
