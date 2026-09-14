@@ -81,7 +81,7 @@ jobs:
     name: Delete backup after sucessfull rollback
         
     needs: rollback-after-deploy-fail
-    if: cancelled()
+    if: always() && needs.rollback-after-deploy-fail.result == success()
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
 
     with:
