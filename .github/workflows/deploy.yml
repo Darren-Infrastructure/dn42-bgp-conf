@@ -19,7 +19,7 @@ jobs:
       matrix:
         target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
         
-    name: Deploy
+    name: Starter
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/run-deploy.yml@main
 
     with:
