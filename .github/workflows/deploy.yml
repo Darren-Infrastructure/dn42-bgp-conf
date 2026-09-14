@@ -87,5 +87,15 @@ jobs:
     if: success()
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
 
+  rollback-after-deploy-fail:
+    strategy:
+      matrix:
+        target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
+    name: Rollback after unsuccessfull deploy
+        
+    needs: deploy
+    if: failure()
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/rollback.yml@main
+
     with:
       target: ${{ matrix.target-runners }}
