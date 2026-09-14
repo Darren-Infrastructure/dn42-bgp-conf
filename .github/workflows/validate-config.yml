@@ -21,6 +21,7 @@ jobs:
           run: |
             cp /etc/bird/asn-num.conf $GITHUB_WORKSPACE
             cp /etc/bird/bird-vars.conf $GITHUB_WORKSPACE
+            cp /etc/bird/region.conf $GITHUB_WORKSPACE
             cp /etc/bird/configs/ipv4/vars.conf $GITHUB_WORKSPACE/configs/ipv4
             cp /etc/bird/configs/ipv6/vars.conf $GITHUB_WORKSPACE/configs/ipv6
             cp /etc/bird/peers/proto_comms.conf $GITHUB_WORKSPACE/peers
