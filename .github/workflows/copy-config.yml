@@ -20,7 +20,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Deploying config
         run: cp -r $GITHUB_WORKSPACE/* /etc/bird
-  validate-config:
+  apply-config:
     # The type of runner that the job will run on
     runs-on: [self-hosted, dn42]
     name: Applying Config
