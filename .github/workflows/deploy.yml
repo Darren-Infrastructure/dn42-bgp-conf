@@ -23,4 +23,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Backup the config
-        run: rm -rf /tmp/bird-back && mkdir -p /tmp/bird-back && cp -r /etc/bird/* /tmp/bird-back && exit 222
+        uses: ./.github/workflows/backup.yml
