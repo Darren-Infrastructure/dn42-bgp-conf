@@ -68,6 +68,7 @@ jobs:
 
   rollback-after-deploy-fail:
     name: Rollback after unsuccessfull deploy
+    
         
     needs: deploy
     if: failure()
@@ -80,7 +81,7 @@ jobs:
     name: Delete backup after sucessfull rollback
         
     needs: rollback-after-deploy-fail
-    if: cancelled() && success()
+    if: cancelled()
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
 
     with:
