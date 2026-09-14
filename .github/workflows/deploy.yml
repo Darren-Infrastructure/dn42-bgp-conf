@@ -26,10 +26,10 @@ jobs:
     name: Backup
     uses: Darren-Infrastructure/dn42-bgp-global-conf/.github/workflows/backup.yml@main
   deploy:
-    needs: backup
+    needs: [checkout, backup]
     name: Deploy
     uses: Darren-Infrastructure/dn42-bgp-global-conf/.github/workflows/copy-config.yml@main
   backup-delete:
-    needs: deploy
+    needs: [checkout, deploy]
     if: success()
     uses: Darren-Infrastructure/dn42-bgp-global-conf/.github/workflows/backup-delete.yml@main
