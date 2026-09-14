@@ -24,12 +24,12 @@ jobs:
   backup:
     needs: checkout
     name: Backup
-    uses: Darren-Infrastructure/dn42-bgp-global-conf/.github/workflows/backup.yml@main
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup.yml@main
   deploy:
-    needs: [checkout, backup]
+    needs: backup
     name: Deploy
-    uses: Darren-Infrastructure/dn42-bgp-global-conf/.github/workflows/copy-config.yml@main
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/copy-config.yml@main
   backup-delete:
-    needs: [checkout, deploy]
+    needs: deploy
     if: success()
-    uses: Darren-Infrastructure/dn42-bgp-global-conf/.github/workflows/backup-delete.yml@main
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
