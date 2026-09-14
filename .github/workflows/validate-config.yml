@@ -15,7 +15,7 @@ jobs:
   validate-config:
     # The type of runner that the job will run on
     runs-on: ${{ inputs.target }}
-    name: Applying Config
+    name: Validating Config
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
