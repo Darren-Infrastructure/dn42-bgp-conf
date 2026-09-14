@@ -15,3 +15,4 @@ asn-num.conf
 bird-vars.conf
 configs/ipv4/vars.conf
 configs/ipv6/vars.conf
+region.conf
