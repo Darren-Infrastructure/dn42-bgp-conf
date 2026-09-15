@@ -10,7 +10,7 @@ on:
         required: true
         type: string
     outputs:
-      status:
+      status-${{ inputs.target }}:
          description: "Job Status"
          value: ${{ jobs.backup.result }}
 
