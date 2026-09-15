@@ -9,6 +9,9 @@ on:
       target:
         required: true
         type: string
+      test: 
+        required: true
+        type: string
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -26,6 +29,7 @@ jobs:
             cp /etc/bird/configs/ipv6/vars.conf $GITHUB_WORKSPACE/configs/ipv6
             cp /etc/bird/peers/proto_comms.conf $GITHUB_WORKSPACE/peers
             cp -r /etc/bird/roa/* $GITHUB_WORKSPACE/roa
+            echo ${{ inputs.test }}
       
   validate-config:
     # The type of runner that the job will run on
