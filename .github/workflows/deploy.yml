@@ -47,6 +47,7 @@ jobs:
         target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
         
     needs: backup
+    if: ${{always() && needs.backup.result == 'success'}}
     name: Validate Config
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/validate-config.yml@main
 
@@ -62,7 +63,7 @@ jobs:
     name: Delete backup after failed pre-apply validation
         
     needs: validate-config
-    if: failure()
+    if: ${{always() && needs.validate-config.result == 'failure'}}
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
 
     with:
@@ -75,7 +76,7 @@ jobs:
         target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
         
     needs: validate-config
-    if: success()
+    if: ${{always() && needs.validate-config.result == 'success'}}
     name: Deploy
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/copy-config.yml@main
 
@@ -90,7 +91,7 @@ jobs:
     name: Delete backup after successfull deploy
         
     needs: deploy
-    if: success()
+    if: ${{always() && needs.deploy.result == 'success'}}
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
 
     with:
@@ -104,7 +105,7 @@ jobs:
     name: Rollback after unsuccessfull deploy
         
     needs: deploy
-    if: failure()
+    if: ${{always() && needs.deploy.result == 'failure'}}
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/rollback.yml@main
 
     with:
