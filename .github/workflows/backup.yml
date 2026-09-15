@@ -9,6 +9,10 @@ on:
       target:
         required: true
         type: string
+    outputs:
+      status:
+         description: "Job Status"
+         value: ${{ jobs.backup.result }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
