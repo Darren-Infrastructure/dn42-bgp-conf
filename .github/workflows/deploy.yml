@@ -107,6 +107,7 @@ jobs:
     strategy:
       matrix:
         target-runners: ${{ fromJSON(vars.BGP_SERVERS) }}
+    if: ${{always() && needs.rollback-after-deploy-fail.result == 'success'}}
     name: Delete backup after rollback
         
     needs: rollback-after-deploy-fail
