@@ -52,6 +52,7 @@ jobs:
 
     with:
       target: ${{ matrix.target-runners }}
+      test: ${{ needs.backup.outputs }}
 
   backup-delete:
     strategy:
