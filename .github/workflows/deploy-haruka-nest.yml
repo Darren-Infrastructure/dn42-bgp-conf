@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Deploy
+name: Deploy (haruka-nest)
 
 # Controls when the workflow will run
 on:
@@ -11,17 +11,13 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-env:
-  server: haruka-nest
-
-
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   checkout:
    name: Checkout
 
-   runs-on: [self-hosted, "${{ vars.server }}"]
+   runs-on: [self-hosted, "${{ vars.haruka-nest }}"]
    
    steps:
        - name: Checking out the repo
@@ -34,7 +30,7 @@ jobs:
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup.yml@main
 
     with:
-      target: ${{ vars.server }}
+      target: ${{ vars.haruka-nest }}
 
   validate-config:    
     needs: backup
@@ -43,7 +39,7 @@ jobs:
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/validate-config.yml@main
 
     with:
-      target: ${{ vars.server }}
+      target: ${{ vars.haruka-nest }}
       test: ${{ toJson(needs.backup.outputs) }}
 
   backup-delete:
@@ -54,7 +50,7 @@ jobs:
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
 
     with:
-      target: ${{ vars.server }}
+      target: ${{ vars.haruka-nest }}
   
   deploy:        
     needs: validate-config
@@ -63,7 +59,7 @@ jobs:
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/copy-config.yml@main
 
     with:
-      target: ${{ vars.server }}
+      target: ${{ vars.haruka-nest }}
   
   backup-delete-after-deploy:
     name: Delete backup after successfull deploy
@@ -73,7 +69,7 @@ jobs:
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
 
     with:
-      target: ${{ vars.server }}
+      target: ${{ vars.haruka-nest }}
 
   rollback-after-deploy-fail:
     name: Rollback after unsuccessfull deploy
@@ -83,7 +79,7 @@ jobs:
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/rollback.yml@main
 
     with:
-      target: ${{ vars.server }}
+      target: ${{ vars.haruka-nest }}
 
   backup-delete-after-rollback:
     if: ${{always() && needs.rollback-after-deploy-fail.result == 'success'}}
@@ -93,4 +89,4 @@ jobs:
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
 
     with:
-      target: ${{ vars.server }}
+      target: ${{ vars.haruka-nest }}
