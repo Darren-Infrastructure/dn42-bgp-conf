@@ -34,7 +34,7 @@ jobs:
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup.yml@main
 
     with:
-      target: ${{ vars }}
+      target: ${{ vars.server }}
 
   validate-config:    
     needs: backup
