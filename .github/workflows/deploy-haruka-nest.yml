@@ -17,7 +17,7 @@ jobs:
   checkout:
    name: Checkout
 
-   runs-on: [self-hosted, "${{ vars.haruka-nest }}"]
+   runs-on: [self-hosted, "${{ vars.haruka_nest }}"]
    
    steps:
        - name: Checking out the repo
@@ -30,7 +30,7 @@ jobs:
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup.yml@main
 
     with:
-      target: ${{ vars.haruka-nest }}
+      target: ${{ vars.haruka_nest }}
 
   validate-config:    
     needs: backup
@@ -39,7 +39,7 @@ jobs:
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/validate-config.yml@main
 
     with:
-      target: ${{ vars.haruka-nest }}
+      target: ${{ vars.haruka_nest }}
       test: ${{ toJson(needs.backup.outputs) }}
 
   backup-delete:
@@ -50,7 +50,7 @@ jobs:
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
 
     with:
-      target: ${{ vars.haruka-nest }}
+      target: ${{ vars.haruka_nest }}
   
   deploy:        
     needs: validate-config
@@ -59,7 +59,7 @@ jobs:
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/copy-config.yml@main
 
     with:
-      target: ${{ vars.haruka-nest }}
+      target: ${{ vars.haruka_nest }}
   
   backup-delete-after-deploy:
     name: Delete backup after successfull deploy
@@ -69,7 +69,7 @@ jobs:
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
 
     with:
-      target: ${{ vars.haruka-nest }}
+      target: ${{ vars.haruka_nest }}
 
   rollback-after-deploy-fail:
     name: Rollback after unsuccessfull deploy
@@ -79,7 +79,7 @@ jobs:
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/rollback.yml@main
 
     with:
-      target: ${{ vars.haruka-nest }}
+      target: ${{ vars.haruka_nest }}
 
   backup-delete-after-rollback:
     if: ${{always() && needs.rollback-after-deploy-fail.result == 'success'}}
@@ -89,4 +89,4 @@ jobs:
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/backup-delete.yml@main
 
     with:
-      target: ${{ vars.haruka-nest }}
+      target: ${{ vars.haruka_nest }}
