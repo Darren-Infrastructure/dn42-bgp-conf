@@ -40,4 +40,4 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:   
       - name: Validating Config
-        run: cd $GITHUB_WORKSPACE && bird -c $GITHUB_WORKSPACE/bird.conf -p
+        run: cd $GITHUB_WORKSPACE && bird -c $GITHUB_WORKSPACE/bird.conf -p && exit 1
