@@ -16,6 +16,7 @@ on:
 jobs:
   checkout:
    name: Checkout
+   environment: ${{ vars.haruka_nest }}
 
    runs-on: [self-hosted, "${{ vars.haruka_nest }}"]
    
@@ -54,6 +55,7 @@ jobs:
   
   deploy:        
     needs: validate-config
+    
     if: ${{always() && needs.validate-config.result == 'success'}}
     name: Deploy
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/copy-config.yml@main
