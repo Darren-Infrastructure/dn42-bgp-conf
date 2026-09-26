@@ -15,6 +15,7 @@ jobs:
   deploy:
     # The type of runner that the job will run on
     runs-on: ${{ inputs.target }}
+    environment: ${{ inputs.target }}
     name: Copying config to target
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -26,6 +27,7 @@ jobs:
   apply-config:
     # The type of runner that the job will run on
     runs-on: ${{ inputs.target }}
+    environment: ${{ inputs.target }}
     name: Applying Config
     needs: deploy
 
