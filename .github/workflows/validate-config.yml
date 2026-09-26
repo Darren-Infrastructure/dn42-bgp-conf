@@ -17,6 +17,7 @@ on:
 jobs:
   pre-validate:
       name: Pre-validation conditioning
+      environment: ${{ inputs.target }}
       runs-on: ${{ inputs.target }}
 
       steps:
@@ -29,11 +30,11 @@ jobs:
             cp /etc/bird/configs/ipv6/vars.conf $GITHUB_WORKSPACE/configs/ipv6
             cp /etc/bird/peers/proto_comms.conf $GITHUB_WORKSPACE/peers
             cp -r /etc/bird/roa/* $GITHUB_WORKSPACE/roa
-            echo "${{ inputs.test }}"
       
   validate-config:
     # The type of runner that the job will run on
     runs-on: ${{ inputs.target }}
+    environment: ${{ inputs.target }}
     name: Validating Config
     needs: pre-validate
 
