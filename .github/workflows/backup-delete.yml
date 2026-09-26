@@ -15,7 +15,9 @@ jobs:
   backup-old-delete:
     # The type of runner that the job will run on
     runs-on: ${{ inputs.target }}
-    environment: ${{ inputs.target }}
+    environment: 
+       name: ${{ inputs.target }}
+       deployment: false
     name: Deleting backup
 
     # Steps represent a sequence of tasks that will be executed as part of the job
