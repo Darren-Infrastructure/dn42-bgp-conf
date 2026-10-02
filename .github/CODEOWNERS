@@ -1,0 +1,8 @@
+# Default owner for everything
+* @dn42
+
+# Protect GitHub Actions workflows
+/.github/workflows/ @darrenwjlau
+
+# Protect CODEOWNERS itself
+/.github/CODEOWNERS @darrenwjlau
