@@ -28,7 +28,7 @@ jobs:
         run: |
          rm -f /etc/netplan/ts-gre_*
          cp -r $GITHUB_WORKSPACE/gre/* /etc/netplan
-         export strip_sites=$(sh "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
+         export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
          echo "/etc/netplan/ts-gre_${strip_sites}.yaml"
          rm -f /etc/netplan/ts-gre_${strip_sites}.yaml
         

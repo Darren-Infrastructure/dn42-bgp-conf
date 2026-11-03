@@ -27,7 +27,7 @@ jobs:
       - name: Deploying config
         run: |
          cp -r $GITHUB_WORKSPACE/* /etc/bird
-         export strip_sites=$(sh "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
+         export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
          rm -f /etc/bird/peers/ibgp/${strip_sites}_ibgp.conf
          rm -rf /etc/bird/gre
         
