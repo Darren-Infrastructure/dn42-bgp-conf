@@ -19,6 +19,8 @@ jobs:
       name: Pre-validation conditioning
       environment: ${{ inputs.target }}
       runs-on: ${{ inputs.target }}
+      env:
+        TARGET: ${{ inputs.target }}
 
       steps:
         - name: Copy vars file to the correct place
@@ -30,6 +32,8 @@ jobs:
             cp /etc/bird/configs/ipv6/vars.conf $GITHUB_WORKSPACE/configs/ipv6
             cp /etc/bird/peers/proto_comms.conf $GITHUB_WORKSPACE/peers
             cp -r /etc/bird/roa/* $GITHUB_WORKSPACE/roa
+            export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
+            rm -f $GITHUB_WORKSPACE/peers/ibgp/${strip_sites}_ibgp.conf
       
   validate-config:
     # The type of runner that the job will run on
