@@ -8,4 +8,4 @@ network:
       ttl: 255
       mtu: 1226
       addresses:
-        - fe80::a001
+        - fe80::a001/64
