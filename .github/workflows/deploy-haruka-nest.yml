@@ -92,3 +92,13 @@ jobs:
 
     with:
       target: ${{ vars.haruka_nest }}
+
+  gre-setup:        
+    needs: deploy
+    
+    if: ${{always()}}
+    name: Deploy GRE Config
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/gre-deploy.yml@main
+
+    with:
+      target: ${{ vars.haruka_nest }}
