@@ -6,6 +6,6 @@ network:
       local: fd7a:115c:a1e0::6d34:1c5c
       remote: fd7a:115c:a1e0::cc33:e552 
       ttl: 255
-      mtu: 1280
+      mtu: 1226
       addresses:
         - fe80::a001
