@@ -1,0 +1,49 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy GRE to Prod
+
+# Controls when the workflow will run
+on:
+  workflow_call:
+    inputs:
+      target:
+        required: true
+        type: string
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ${{ inputs.target }}
+    environment: ${{ inputs.target }}
+    name: Copying config to target
+    env:
+      TARGET: ${{ inputs.target }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      # Runs a single command using the runners shell
+      - name: Deploying config
+        run: |
+         rm -f /etc/netplan/ts-gre_*
+         cp -r $GITHUB_WORKSPACE/gre/* /etc/netplan
+         export strip_sites=$(sh "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
+         rm -f /etc/netplan/ts-gre_${strip_sites}.yaml
+        
+  apply-config:
+    # The type of runner that the job will run on
+    runs-on: ${{ inputs.target }}
+    environment: ${{ inputs.target }}
+    name: Applying Config
+    needs: deploy
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      
+      - name: Generate Config
+        run: netplan generate
+
+      - name: Applying config
+        run: netplan apply
