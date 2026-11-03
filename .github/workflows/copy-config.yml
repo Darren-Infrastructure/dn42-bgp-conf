@@ -17,13 +17,19 @@ jobs:
     runs-on: ${{ inputs.target }}
     environment: ${{ inputs.target }}
     name: Copying config to target
+    env:
+      TARGET: ${{ inputs.target }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
 
       # Runs a single command using the runners shell
       - name: Deploying config
-        run: cp -r $GITHUB_WORKSPACE/* /etc/bird
+        run: |
+         cp -r $GITHUB_WORKSPACE/* /etc/bird
+         export strip_sites=$(sh "$GITHUB_WORKSPACE/strip-sites.sh" "$TARGET")
+         rm -f /etc/bird/peers/ibgp/$strip_sites.conf
+        
   apply-config:
     # The type of runner that the job will run on
     runs-on: ${{ inputs.target }}
