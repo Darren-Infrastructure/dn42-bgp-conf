@@ -10,3 +10,4 @@ network:
       mtu: 1226
       addresses:
         - fe80::a000/64
+        - fd9a:8a86:7647::a000/64
