@@ -3,7 +3,7 @@ network:
   tunnels:
     gre_haruka:
       mode: gre
-      local: 100.107.229.82
+      local: 1.1.1.1
       remote: 100.110.28.91
       ttl: 255
       mtu: 1226
