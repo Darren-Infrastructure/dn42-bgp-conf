@@ -2,9 +2,9 @@ network:
   version: 2
   tunnels:
     gre_haruka:
-      mode: ip6gre
-      local: fd7a:115c:a1e0::cc33:e552
-      remote: fd7a:115c:a1e0::6d34:1c5c
+      mode: gre
+      local: 100.107.229.82
+      remote: 100.110.28.91
       ttl: 255
       mtu: 1226
       addresses:
