@@ -28,7 +28,7 @@ jobs:
         run: |
          cp -r $GITHUB_WORKSPACE/* /etc/bird
          export strip_sites=$(sh "$GITHUB_WORKSPACE/strip-sites.sh" "$TARGET")
-         rm -f /etc/bird/peers/ibgp/${strip_sites}.conf
+         rm -f /etc/bird/peers/ibgp/${strip_sites}_ibgp.conf
         
   apply-config:
     # The type of runner that the job will run on
