@@ -41,7 +41,10 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-
+      - name: Fixing config
+        run: |
+          export tailscale_local=$(ip addr show tailscale0 | grep 'inet ' | awk '{print $2}' | cut -d/ -f1)
+          sudo sed -i "s/LOCAL/${tailscale_local}/g" /etc/netplan/ts-gre_haruka.yaml
       
       - name: Generate Config
         run: netplan generate
