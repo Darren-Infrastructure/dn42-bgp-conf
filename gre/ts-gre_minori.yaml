@@ -3,8 +3,8 @@ network:
   tunnels:
     gre_minori:
       mode: gre
-      local: 100.107.229.82
-      remote: 100.110.28.91
+      local: 100.110.28.91
+      remote: 100.107.229.82
       ttl: 255
       mtu: 1226
       addresses:
