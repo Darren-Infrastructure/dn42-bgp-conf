@@ -3,6 +3,7 @@ network:
   tunnels:
     gre_haruka:
       mode: gre
+      renderer: networkd
       local: LOCAL
       remote: 100.110.28.91
       ttl: 255
