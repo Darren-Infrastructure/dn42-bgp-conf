@@ -3,6 +3,7 @@ network:
   tunnels:
     gre_minori:
       mode: gre
+      renderer: networkd
       local: LOCAL
       remote: 100.107.229.82
       ttl: 255
