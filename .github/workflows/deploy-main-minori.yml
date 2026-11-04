@@ -94,12 +94,6 @@ jobs:
       target: ${{ vars.main_minori }}
 
 
-  gre-setup:        
-    needs: deploy
-    
-    if: ${{always()}}
-    name: Deploy GRE Config
-    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/gre-deploy.yml@main
 
     with:
       target: ${{ vars.main_minori }}
