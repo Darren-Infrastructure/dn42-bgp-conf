@@ -92,6 +92,15 @@ jobs:
 
     with:
       target: ${{ vars.main_minori }}
+  deploy-n3n:
+    name: Deploying n3n config
+        
+    needs: deploy
+    if: ${{always() && needs.deploy.result != 'cancelled'}}
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/apply-n3n.yml@main
+
+    with:
+      target: ${{ vars.main_minori }}
 
 
 
