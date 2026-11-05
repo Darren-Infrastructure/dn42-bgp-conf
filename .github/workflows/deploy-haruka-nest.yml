@@ -93,12 +93,13 @@ jobs:
     with:
       target: ${{ vars.haruka_nest }}
 
-  gre-setup:        
+  deploy-n3n:
+    name: Deploying n3n config
+        
     needs: deploy
-    
-    if: ${{always()}}
-    name: Deploy GRE Config
-    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/gre-deploy.yml@main
+    if: ${{always() && needs.deploy.result != 'cancelled'}}
+    uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/apply-n3n.yml@main
 
     with:
       target: ${{ vars.haruka_nest }}
+

@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Deploy GRE to Prod
+name: Deploy N3N to Prod
 
 # Controls when the workflow will run
 on:
@@ -26,11 +26,9 @@ jobs:
       # Runs a single command using the runners shell
       - name: Deploying config
         run: |
-         rm -f /etc/netplan/ts-gre_*
-         cp -r $GITHUB_WORKSPACE/gre/* /etc/netplan
          export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
-         echo "/etc/netplan/ts-gre_${strip_sites}.yaml"
-         rm -f /etc/netplan/ts-gre_${strip_sites}.yaml
+         export full_conf=$(cat $GITHUB_WORKSPACE/n3n/$strip_sites.conf && echo ' ' && cat $GITHUB_WORKSPACE/n3n/base.conf)
+         cat $full_conf > /etc/n3n/proseka.conf
         
   apply-config:
     # The type of runner that the job will run on
@@ -41,13 +39,10 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Fixing config
-        run: |
-          export tailscale_local=$(ip addr show tailscale0 | grep 'inet ' | awk '{print $2}' | cut -d/ -f1)
-          sudo sed -i "s/LOCAL/${tailscale_local}/g" /etc/netplan/ts-gre_*.yaml
-      
-      - name: Generate Config
-        run: netplan generate
 
-      - name: Applying config
-        run: netplan apply
+      
+      - name: Setting up service
+        run: systemctl enable n3n-edge@proseka
+
+      - name: Running it
+        run: systemctl restart n3n-edge@proseka
