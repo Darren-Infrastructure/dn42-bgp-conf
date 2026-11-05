@@ -1,0 +1,48 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy N3N to Prod
+
+# Controls when the workflow will run
+on:
+  workflow_call:
+    inputs:
+      target:
+        required: true
+        type: string
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ${{ inputs.target }}
+    environment: ${{ inputs.target }}
+    name: Copying config to target
+    env:
+      TARGET: ${{ inputs.target }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      # Runs a single command using the runners shell
+      - name: Deploying config
+        run: |
+         export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
+         export full_conf=$(cat $GITHUB_WORKSPACE/n3n/$strip_sites.conf && echo ' ' && cat $GITHUB_WORKSPACE/n3n/base.conf)
+         cat $full_conf > /etc/n3n/proseka.conf
+        
+  apply-config:
+    # The type of runner that the job will run on
+    runs-on: ${{ inputs.target }}
+    environment: ${{ inputs.target }}
+    name: Applying Config
+    needs: deploy
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      
+      - name: Setting up service
+        run: systemctl enable n3n-edge@proseka
+
+      - name: Running it
+        run: systemctl restart n3n-edge@proseka
