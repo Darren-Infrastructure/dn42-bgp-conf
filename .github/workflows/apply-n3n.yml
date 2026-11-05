@@ -30,7 +30,7 @@ jobs:
         run: |
          export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
          export full_conf=$(cat $GITHUB_WORKSPACE/n3n/$strip_sites.conf && echo ' ' && cat $GITHUB_WORKSPACE/n3n/base.conf)
-         echo $full_conf > /etc/n3n/proseka.conf
+         printf '%s\n' "$full_conf" > /etc/n3n/proseka.conf
          sed "s/REPLACESUPERNODE/$SUPERNODE/" /etc/n3n/proseka.conf -i
          sed "s/REPLACEKEY/$KEY/" /etc/n3n/proseka.conf -i
         
