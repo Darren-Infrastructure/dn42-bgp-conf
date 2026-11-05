@@ -92,6 +92,7 @@ jobs:
 
     with:
       target: ${{ vars.main_minori }}
+  
   deploy-n3n:
     name: Deploying n3n config
         
@@ -102,7 +103,3 @@ jobs:
     with:
       target: ${{ vars.main_minori }}
 
-
-
-    with:
-      target: ${{ vars.main_minori }}
