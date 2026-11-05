@@ -97,6 +97,7 @@ jobs:
     name: Deploying n3n config
         
     needs: deploy
+    secrets: inherit
     if: ${{always() && needs.deploy.result != 'cancelled'}}
     uses: Darren-Infrastructure/dn42-bgp-conf/.github/workflows/apply-n3n.yml@main
 
