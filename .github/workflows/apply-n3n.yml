@@ -33,6 +33,7 @@ jobs:
          printf '%s\n' "$full_conf" > /etc/n3n/proseka.conf
          sed "s/REPLACESUPERNODE/$SUPERNODE/" /etc/n3n/proseka.conf -i
          sed "s/REPLACEKEY/$KEY/" /etc/n3n/proseka.conf -i
+         cat /etc/n3n/proseka.conf
         
   apply-config:
     # The type of runner that the job will run on
