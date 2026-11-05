@@ -20,7 +20,7 @@ jobs:
     env:
       TARGET: ${{ inputs.target }}
       SUPERNODE: ${{ vars.n3n_supernode }}
-      KEY: ${{ vars.n3n_comm_key }}
+      KEY: ${{ secrets.n3n_comm_key }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
