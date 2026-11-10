@@ -28,6 +28,7 @@ jobs:
         run: |
          export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
          export full_conf=$(cat $GITHUB_WORKSPACE/n3n/$strip_sites.conf && echo ' ' && cat $GITHUB_WORKSPACE/n3n/base.conf)
+         printf '%s\n' "$full_conf" > /etc/n3n/proseka.conf
   
   populate-config:
     runs-on: ${{ inputs.target }}
@@ -41,7 +42,6 @@ jobs:
     steps:
       - name: Adding supernode and secrets
         run: |
-         printf '%s\n' "$full_conf" > /etc/n3n/proseka.conf
          python3 - <<'PY'
          import os
          from pathlib import Path
