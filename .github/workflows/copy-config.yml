@@ -27,8 +27,13 @@ jobs:
       - name: Deploying config
         run: |
          cp -r $GITHUB_WORKSPACE/* /etc/bird
+      - name: Removing Self IBGP Config
+        run: |
          export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
          rm -f /etc/bird/peers/ibgp/${strip_sites}_ibgp.conf
+
+      - name: Remove bootstrap files
+        run: rm -f /etc/bird/n3n
         
   apply-config:
     # The type of runner that the job will run on
