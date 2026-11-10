@@ -19,8 +19,6 @@ jobs:
     name: Copying config to target
     env:
       TARGET: ${{ inputs.target }}
-      SUPERNODE: ${{ vars.n3n_supernode }}
-      KEY: ${{ secrets.N3N_COMM_KEY }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -30,6 +28,19 @@ jobs:
         run: |
          export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
          export full_conf=$(cat $GITHUB_WORKSPACE/n3n/$strip_sites.conf && echo ' ' && cat $GITHUB_WORKSPACE/n3n/base.conf)
+  
+  populate-config:
+    runs-on: ${{ inputs.target }}
+    environment: ${{ inputs.target }}
+    name: Populating the config
+    needs: deploy
+    env:
+      SUPERNODE: ${{ vars.n3n_supernode }}
+      KEY: ${{ secrets.N3N_COMM_KEY }}
+
+    steps:
+      - name: Adding supernode and secrets
+        run: |
          printf '%s\n' "$full_conf" > /etc/n3n/proseka.conf
          python3 - <<'PY'
          import os
@@ -41,21 +52,28 @@ jobs:
          s = s.replace("REPLACEKEY", os.environ["KEY"])
          p.write_text(s)
          PY
-         cat /etc/n3n/proseka.conf
+      - name: Copying the script needed
+        run: |
+         cp $GITHUB_WORKSPACE/n3n/proseka-ipv6-conf.sh /etc/n3n/
+         chmod +x /etc/n3n/proseka-ipv6-conf.sh
         
   apply-config:
     # The type of runner that the job will run on
     runs-on: ${{ inputs.target }}
     environment: ${{ inputs.target }}
     name: Applying Config
-    needs: deploy
+    needs: populate-config
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Copying service file to the systemd dir
+        run: cp $GITHUB_WORKSPACE/n3n/proseka-n3n.service /etc/systemd/system
 
+      - name: Reloading Systemd Daemon
+        run: systemctl daemon-reload
       
       - name: Setting up service
-        run: systemctl enable n3n-edge@proseka
+        run: systemctl enable proseka-n3n
 
       - name: Running it
-        run: systemctl restart n3n-edge@proseka
+        run: systemctl restart proseka-n3n
