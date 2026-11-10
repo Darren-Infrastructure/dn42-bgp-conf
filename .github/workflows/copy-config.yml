@@ -33,7 +33,7 @@ jobs:
          rm -f /etc/bird/peers/ibgp/${strip_sites}_ibgp.conf
 
       - name: Remove bootstrap files
-        run: rm -f /etc/bird/n3n
+        run: rm -rf /etc/bird/n3n
         
   apply-config:
     # The type of runner that the job will run on
