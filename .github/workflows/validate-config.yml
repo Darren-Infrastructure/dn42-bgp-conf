@@ -44,7 +44,7 @@ jobs:
         - name: Copy self babel file
           run: |
             export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
-            cp $GITHUB_WORKSPACE/babel-configs/${strip_sites}_babel.conf ${strip_sites}/peers/ibgp/
+            cp $GITHUB_WORKSPACE/babel-configs/${strip_sites}_babel.conf $GITHUB_WORKSPACE/peers/ibgp/
       
   validate-config:
     # The type of runner that the job will run on
