@@ -67,7 +67,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Copying service file to the systemd dir
-        run: cp $GITHUB_WORKSPACE/service/proseka-n3n.service /etc/systemd/system
+        run: cp $GITHUB_WORKSPACE/services/proseka-n3n.service /etc/systemd/system
 
       - name: Reloading Systemd Daemon
         run: systemctl daemon-reload
