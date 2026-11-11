@@ -7,7 +7,7 @@ Wants=network-online.target
 Type=simple
 ExecStartPre=
 ExecStart=/usr/sbin/n3n-edge start proseka
-ExecStartPost=sh /etc/n3n/proseka-ipv6-conf.sh
+ExecStartPost=proseka-ipv6-conf
 Restart=on-abnormal
 RestartSec=5
 
