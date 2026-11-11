@@ -54,8 +54,8 @@ jobs:
          PY
       - name: Copying the script needed
         run: |
-         cp $GITHUB_WORKSPACE/n3n/proseka-ipv6-conf.sh /etc/n3n/
-         chmod +x /etc/n3n/proseka-ipv6-conf.sh
+         cp $GITHUB_WORKSPACE/bin/proseka-ipv6-conf.sh /usr/bin/proseka-ipv6-conf
+         chmod +x /usr/bin/proseka-ipv6-conf
         
   apply-config:
     # The type of runner that the job will run on
@@ -67,7 +67,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Copying service file to the systemd dir
-        run: cp $GITHUB_WORKSPACE/n3n/proseka-n3n.service /etc/systemd/system
+        run: cp $GITHUB_WORKSPACE/service/proseka-n3n.service /etc/systemd/system
 
       - name: Reloading Systemd Daemon
         run: systemctl daemon-reload
