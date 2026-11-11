@@ -31,9 +31,20 @@ jobs:
             cp /etc/bird/configs/ipv4/vars.conf $GITHUB_WORKSPACE/configs/ipv4
             cp /etc/bird/configs/ipv6/vars.conf $GITHUB_WORKSPACE/configs/ipv6
             cp /etc/bird/peers/proto_comms.conf $GITHUB_WORKSPACE/peers
+            
+        - name: Copy ROA files to the correct place
+          run: |
             cp -r /etc/bird/roa/* $GITHUB_WORKSPACE/roa
+
+        - name: Remove self ibgp file
+          run: |
             export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
             rm -f $GITHUB_WORKSPACE/peers/ibgp/${strip_sites}_ibgp.conf
+
+        - name: Copy self babel file
+          run: |
+            export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
+            cp $GITHUB_WORKSPACE/babel-configs/${strip_sites}_babel.conf ${strip_sites}/peers/ibgp/
       
   validate-config:
     # The type of runner that the job will run on

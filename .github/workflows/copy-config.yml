@@ -37,6 +37,7 @@ jobs:
           rm -rf /etc/bird/n3n
           rm -rf /etc/bird/bin
           rm -rf /etc/bird/services
+          rm -rf /etc/bird/babel-configs
         
   apply-config:
     # The type of runner that the job will run on
