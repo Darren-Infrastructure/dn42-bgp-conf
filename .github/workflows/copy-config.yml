@@ -26,19 +26,32 @@ jobs:
       # Runs a single command using the runners shell
       - name: Deploying config
         run: |
-         cp -r $GITHUB_WORKSPACE/* /etc/bird
-      - name: Removing Self IBGP Config
-        run: |
-         export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
-         rm -f /etc/bird/peers/ibgp/${strip_sites}_ibgp.conf
+         cp -r $GITHUB_WORKSPACE/* /etc/bird || {
+              echo "::error title=Failed to copy config over:: Check Logs"
+              exit 1
+            }
+          echo "::notice title=Config copied over ::Removing bootstrap files next"
 
       - name: Remove bootstrap files
         run: |
-          rm -rf /etc/bird/n3n
-          rm -rf /etc/bird/bin
-          rm -rf /etc/bird/services
-          rm -rf /etc/bird/babel-configs
-        
+          rm -rf /etc/bird/n3n || {
+              echo "::error title=Failed to remove n3n files:: Check Logs"
+              exit 1
+            }
+          rm -rf /etc/bird/bin  || {
+              echo "::error title=Failed to remove binaries files:: Check Logs"
+              exit 1
+            }
+          rm -rf /etc/bird/services  || {
+              echo "::error title=Failed to remove services files:: Check Logs"
+              exit 1
+            }
+          rm -rf /etc/bird/babel-configs  || {
+              echo "::error title=Failed to remove babel configs:: Check Logs"
+              exit 1
+            }
+          echo "::notice title=Removed bootstrap files ::Ready to apply"
+          
   apply-config:
     # The type of runner that the job will run on
     runs-on: ${{ inputs.target }}
@@ -51,4 +64,9 @@ jobs:
 
       
       - name: Applying Config
-        run: birdc configure
+        run: |
+          birdc configure  || {
+              echo "::error title=Failed to apply bird configuration:: Check Logs"
+              exit 1
+            }
+          echo "::notice title=Applied bird configuration ::Done"
