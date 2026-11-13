@@ -47,8 +47,9 @@ jobs:
           echo "::notice title=Ownership fix success ::Configuring next"
       - name: Applying Rollback Config
         run: |
-          birdc config || {
-              echo "::error title=Failed to configure:: Check Logs"
+          result=$(birdc configure 2>&1) || {
+              echo "::error title=Failed to configure:: $result"
               exit 1
             }
-          echo "::notice title=Bad config rollback success ::System Normal"
+          echo "$result"
+          echo "::notice title=Bad config rollback success :: $result"
