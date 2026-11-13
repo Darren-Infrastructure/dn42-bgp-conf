@@ -54,19 +54,19 @@ jobs:
     steps:
       - name: Adding supernode and secrets
         run: |
-         python3 - <<'PY'
-         import os
-         from pathlib import Path
-          
-         p = Path("/etc/n3n/proseka.conf")
-         s = p.read_text()
-         s = s.replace("REPLACESUPERNODE", os.environ["SUPERNODE"])
-         s = s.replace("REPLACEKEY", os.environ["KEY"])
-         p.write_text(s)
-         PY  || {
-              echo "::error title=Failed to fill in secrets:: Check Logs"
-              exit 1
-            }
+          python3 - <<'PY' || {
+            echo "::error title=Failed to fill in secrets::Check Logs"
+            exit 1
+          }
+          import os
+          from pathlib import Path
+    
+          p = Path("/etc/n3n/proseka.conf")
+          s = p.read_text()
+          s = s.replace("REPLACESUPERNODE", os.environ["SUPERNODE"])
+          s = s.replace("REPLACEKEY", os.environ["KEY"])
+          p.write_text(s)
+          PY
           echo "::notice title=n3n config placeholder filled in ::Ready to deploy"
       - name: Copying the script needed
         run: |
