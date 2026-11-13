@@ -70,4 +70,9 @@ jobs:
               exit 1
             }
           echo "$result"
+          result=$(birdc s p 2>&1)  || {
+              echo "::error title=Failed to get current bird status:: $result"
+              exit 1
+            }
+          echo "$result"
           echo "::notice title=Applied bird configuration :: $result"
