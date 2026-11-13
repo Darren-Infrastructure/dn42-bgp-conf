@@ -104,3 +104,13 @@ jobs:
     with:
       target: ${{ vars.main_minori }}
 
+
+  workflow-status-report:
+      name: Reports actual deploy status
+      runs-on: ubuntu-slim
+      if: failure()
+      environment: ${{ vars.main_minori }}
+      steps:
+       - name: Fail on purpose
+         run: |
+            exit 1
