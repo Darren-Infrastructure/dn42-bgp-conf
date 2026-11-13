@@ -27,8 +27,20 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Delete old backup
-        run: rm -rf /tmp/bird-back
+        run: |
+          rm -rf /tmp/bird-back
+          
       - name: Creating backup directory
-        run: mkdir -p /tmp/bird-back
+        run: | 
+          mkdir -p /tmp/bird-back || {
+              echo "::error title=Failed to create backup dir:: Check Logs"
+              exit 1
+            }
+          echo "::notice title=Backup Dir Creation Success ::Backup dir created"
       - name: Copy to backup
-        run: cp -r /etc/bird/* /tmp/bird-back
+        run: |
+          cp -r /etc/bird/* /tmp/bird-back || {
+              echo "::error title=Backup failure ::Failed to copy to backup"
+              exit 1
+            }
+          echo "::notice title=Backup Creation Success ::Configs copied to backup"
