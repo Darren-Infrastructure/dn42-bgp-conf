@@ -95,7 +95,7 @@ jobs:
       - name: Validating Config
         run: |
           cd $GITHUB_WORKSPACE
-          export result=$(bird -c $GITHUB_WORKSPACE/bird.conf -p 2>&1) || {
+          result=$(bird -c $GITHUB_WORKSPACE/bird.conf -p 2>&1) || {
               echo "::error title=Validation Error ::Config failed validation %0A $result"
               exit 1
             }
