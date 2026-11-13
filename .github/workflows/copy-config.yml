@@ -69,4 +69,5 @@ jobs:
               echo "::error title=Failed to apply bird configuration:: $result"
               exit 1
             }
+          echo "$result"
           echo "::notice title=Applied bird configuration :: $result"
