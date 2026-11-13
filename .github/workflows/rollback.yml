@@ -53,7 +53,7 @@ jobs:
                 -e 's/%/%25/g' \
                 -e 's/\r/%0D/g' \
                 -e ':a;N;$!ba;s/\n/%0A/g')
-              echo "::error title=Failed to configure:: $encoded_result"
+              echo "::error title=Failed to configure:: ```$encoded_result```"
               exit 1
             }
           echo "$result"
@@ -61,4 +61,4 @@ jobs:
             -e 's/%/%25/g' \
             -e 's/\r/%0D/g' \
             -e ':a;N;$!ba;s/\n/%0A/g')
-          echo "::notice title=Bad config rollback success :: $encoded_result"
+          echo "::notice title=Bad config rollback success :: ```$encoded_result```"
