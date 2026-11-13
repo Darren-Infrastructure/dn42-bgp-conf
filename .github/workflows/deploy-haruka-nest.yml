@@ -104,18 +104,4 @@ jobs:
     with:
       target: ${{ vars.haruka_nest }}
 
-  workflow-status-report:
-      name: Reports actual deploy status
-      runs-on: ubuntu-slim
-      if: failure()
-      needs: 
-        - backup
-        - validate-config
-        - deploy
-        - deploy-n3n
-        - checkout
-      environment: ${{ vars.haruka_nest }}
-      steps:
-       - name: Fail on purpose
-         run: |
-            exit 1
+  
