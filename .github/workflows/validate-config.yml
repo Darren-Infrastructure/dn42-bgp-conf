@@ -94,8 +94,10 @@ jobs:
     steps:   
       - name: Validating Config
         run: |
-          cd $GITHUB_WORKSPACE && bird -c $GITHUB_WORKSPACE/bird.conf -p || {
-              echo "::error title=Validation Error ::Config failed validation, please check your logs"
+          cd $GITHUB_WORKSPACE
+          result=$(bird -c $GITHUB_WORKSPACE/bird.conf -p 2>&1) || {
+              echo "::error title=Validation Error ::Config failed validation %0A $result"
               exit 1
             }
-          echo "::notice title=Config Successfuly Validated ::No errors needing attentions"
+          echo "$result"
+          echo "::notice title=Config Successfuly Validated :: $result"
