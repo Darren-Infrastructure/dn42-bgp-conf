@@ -70,7 +70,7 @@ jobs:
           echo "::notice title=n3n config placeholder filled in ::Ready to deploy"
       - name: Copying the script needed
         run: |
-         cp $GITHUB_WORKSPACE/bin/proseka-ipv6-conf.sh /usr/bin/proseka-conf  || {
+         cp $GITHUB_WORKSPACE/bin/proseka-conf.sh /usr/bin/proseka-conf  || {
               echo "::error title=Failed to copy configuration binary to dir:: Check Logs"
               exit 1
             }
