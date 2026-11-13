@@ -61,7 +61,7 @@ jobs:
 
         - name: Remove self ibgp file
           run: |
-            export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET") || {
+            strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET") || {
               echo "::error title=Workflow suplementation failure ::Failed to determine node name"
               exit 1
             }
@@ -73,7 +73,7 @@ jobs:
 
         - name: Copy self babel file
           run: |
-            export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET") || {
+            strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET") || {
               echo "::error title=Workflow suplementation failure ::Failed to determine node name"
               exit 1
             }
