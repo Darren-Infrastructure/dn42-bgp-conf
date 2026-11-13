@@ -120,4 +120,7 @@ jobs:
               echo "::error title=Failed to start n3n service:: Check Logs"
               exit 1
             }
-          echo "::notice title=Started n3n services ::Deploy done"
+          export proseka_ipv4=$(cat /etc/n3n/proseka.conf  | grep address= | awk -F "=" '{print $2 }')
+          export proseka_ipv6_last_octet=$(echo $proseka_ipv4 | awk -F "." '{print $4 }' | xargs printf 'a%03x\n')
+          export proseka_full_ipv6=fdc9:e79b:6a88::${proseka_ipv6_last_octet} 
+          echo "::notice title=Started n3n services ::Deploy done %0A  %0A 🌐 Connection Details %0A Ipv4: $proseka_ipv4 %0A Ipv6: $proseka_full_ipv6"
