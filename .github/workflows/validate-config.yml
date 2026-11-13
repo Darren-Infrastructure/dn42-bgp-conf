@@ -96,7 +96,8 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           export result=$(bird -c $GITHUB_WORKSPACE/bird.conf -p 2>&1) || {
-              echo "::error title=Validation Error ::Config failed validation %"
+              echo "::error title=Validation Error ::Config failed validation %0A $result"
               exit 1
             }
-          echo "::notice title=Config Successfuly Validated ::No errors needing attentions"
+          echo "$result"
+          echo "::notice title=Config Successfuly Validated :: $result"
