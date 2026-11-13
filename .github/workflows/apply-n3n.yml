@@ -27,11 +27,11 @@ jobs:
       # Runs a single command using the runners shell
       - name: Deploying config
         run: |
-         export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET") || {
+         strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET") || {
               echo "::error title=Failed to determine node name:: Check Logs"
               exit 1
             }
-         export full_conf=$(cat $GITHUB_WORKSPACE/n3n/$strip_sites.conf && echo ' ' && cat $GITHUB_WORKSPACE/n3n/base.conf)  || {
+         full_conf=$(cat $GITHUB_WORKSPACE/n3n/$strip_sites.conf && echo ' ' && cat $GITHUB_WORKSPACE/n3n/base.conf)  || {
               echo "::error title=Failed to piece together config for $TARGET:: Check Logs"
               exit 1
             }
@@ -121,7 +121,7 @@ jobs:
               echo "::error title=Failed to start n3n service:: Check Logs"
               exit 1
             }
-          export proseka_ipv4=$(cat /etc/n3n/proseka.conf  | grep address= | awk -F "=" '{print $2 }')
-          export proseka_ipv6_last_octet=$(echo $proseka_ipv4 | awk -F "." '{print $4 }' | xargs printf 'a%03x\n')
-          export proseka_full_ipv6=fdc9:e79b:6a88::${proseka_ipv6_last_octet} 
+          proseka_ipv4=$(cat /etc/n3n/proseka.conf  | grep address= | awk -F "=" '{print $2 }')
+          proseka_ipv6_last_octet=$(echo $proseka_ipv4 | awk -F "." '{print $4 }' | xargs printf 'a%03x\n')
+                          proseka_full_ipv6=fdc9:e79b:6a88::${proseka_ipv6_last_octet} 
           echo "::notice title=Started n3n services ::Deploy done %0A  %0A 🌐 Connection Details %0A Ipv4: $proseka_ipv4 %0A Ipv6: $proseka_full_ipv6"
