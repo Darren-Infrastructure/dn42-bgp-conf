@@ -103,5 +103,4 @@ jobs:
 
     with:
       target: ${{ vars.haruka_nest }}
-      lastjob_status: ${{ needs.deploy.result }}
 
