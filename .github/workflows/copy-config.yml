@@ -65,8 +65,9 @@ jobs:
       
       - name: Applying Config
         run: |
-          result = $(birdc configure 2>&1)  || {
+          result=$(birdc configure 2>&1)  || {
               echo "::error title=Failed to apply bird configuration:: $result"
               exit 1
             }
+          echo "$result"
           echo "::notice title=Applied bird configuration :: $result"
