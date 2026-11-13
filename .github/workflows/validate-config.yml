@@ -81,7 +81,7 @@ jobs:
               echo "::error title=Workflow suplementation failure ::Failed to copy the correct babel config"
               exit 1
             }
-            echo "::notice title=Babel file copied ::Enrolling node in babel network with identity $TARGET %0A %0A 🛤️ Routes: %0A ```Test```"
+            echo "::notice title=Babel file copied ::Enrolling node in babel network with identity $TARGET %0A %0A 🛤️ Routes: %0A Test"
       
   validate-config:
     # The type of runner that the job will run on
@@ -101,7 +101,7 @@ jobs:
                 -e 's/%/%25/g' \
                 -e 's/\r/%0D/g' \
                 -e ':a;N;$!ba;s/\n/%0A/g')
-              echo "::error title=Validation Error ::Config failed validation %0A ```$encoded_result```"
+              echo "::error title=Validation Error ::Config failed validation %0A $encoded_result"
               exit 1
             }
           echo "$result"
@@ -109,4 +109,4 @@ jobs:
              -e 's/%/%25/g' \
              -e 's/\r/%0D/g' \
              -e ':a;N;$!ba;s/\n/%0A/g')
-          echo "::notice title=Config Successfuly Validated :: ```$encoded_result```"
+          echo "::notice title=Config Successfuly Validated :: $encoded_result"
