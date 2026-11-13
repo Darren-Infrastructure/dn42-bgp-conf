@@ -25,30 +25,63 @@ jobs:
       steps:
         - name: Copy vars file to the correct place
           run: |
-            cp /etc/bird/asn-num.conf $GITHUB_WORKSPACE
-            cp /etc/bird/bird-vars.conf $GITHUB_WORKSPACE
-            cp /etc/bird/region.conf $GITHUB_WORKSPACE
-            cp /etc/bird/configs/ipv4/vars.conf $GITHUB_WORKSPACE/configs/ipv4
-            cp /etc/bird/configs/ipv6/vars.conf $GITHUB_WORKSPACE/configs/ipv6
-            cp /etc/bird/peers/proto_comms.conf $GITHUB_WORKSPACE/peers
+            cp /etc/bird/asn-num.conf $GITHUB_WORKSPACE || {
+              echo "::error title=Workflow suplementation failure ::Failed to copy asn number" 
+              exit 1
+            }
+            cp /etc/bird/bird-vars.conf $GITHUB_WORKSPACE || {
+              echo "::error title=Workflow suplementation failure ::Failed to copy bird vars"
+              exit 1
+            }
+            cp /etc/bird/region.conf $GITHUB_WORKSPACE || {
+              echo "::error title=Workflow suplementation failure ::Failed to region config"
+              exit 1
+            }
+            cp /etc/bird/configs/ipv4/vars.conf $GITHUB_WORKSPACE/configs/ipv4 || {
+              echo "::error title=Workflow suplementation failure ::Failed to copy ipv4 config"
+              exit 1
+            }
+            cp /etc/bird/configs/ipv6/vars.conf $GITHUB_WORKSPACE/configs/ipv6 || {
+              echo "::error title=Workflow suplementation failure ::Failed to copy ipv6 config"
+              exit 1
+            }
+            cp /etc/bird/peers/proto_comms.conf $GITHUB_WORKSPACE/peers || {
+              echo "::error title=Workflow suplementation failure ::Failed to copy protocol comms"
+              exit 1
+            }
             echo "::notice title=Workflow suplemented ::All needed variable files has been copied"
             
         - name: Copy ROA files to the correct place
           run: |
-            cp -r /etc/bird/roa/* $GITHUB_WORKSPACE/roa
+            cp -r /etc/bird/roa/* $GITHUB_WORKSPACE/roa || {
+              echo "::error title=Workflow suplementation failure ::Failed to copy ROA files for validation"
+              exit 1
+            }
             echo "::notice title=Workflow suplemented ::All ROA files has been copied"
 
         - name: Remove self ibgp file
           run: |
-            export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
-            rm -f $GITHUB_WORKSPACE/peers/ibgp/${strip_sites}_ibgp.conf
+            export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET") || {
+              echo "::error title=Workflow suplementation failure ::Failed to determine node name"
+              exit 1
+            }
+            rm -f $GITHUB_WORKSPACE/peers/ibgp/${strip_sites}_ibgp.conf || {
+              echo "::error title=Workflow suplementation failure ::Failed to remove self IBGP file"
+              exit 1
+            }
             echo "::notice title=IBGP Error Prevention ::Removing self IBGP to prevent loop"
 
         - name: Copy self babel file
           run: |
-            export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
-            cp $GITHUB_WORKSPACE/babel-configs/${strip_sites}_babel.conf $GITHUB_WORKSPACE/peers/ibgp/
-            echo "::notice title=Babel file copied ::Enrolling node in babel network"
+            export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET") || {
+              echo "::error title=Workflow suplementation failure ::Failed to determine node name"
+              exit 1
+            }
+            cp $GITHUB_WORKSPACE/babel-configs/${strip_sites}_babel.conf $GITHUB_WORKSPACE/peers/ibgp/ || {
+              echo "::error title=Workflow suplementation failure ::Failed to copy the correct babel config"
+              exit 1
+            }
+            echo "::notice title=Babel file copied ::Enrolling node in babel network with identity $TARGET"
       
   validate-config:
     # The type of runner that the job will run on
@@ -61,5 +94,8 @@ jobs:
     steps:   
       - name: Validating Config
         run: |
-          cd $GITHUB_WORKSPACE && bird -c $GITHUB_WORKSPACE/bird.conf -p
+          cd $GITHUB_WORKSPACE && bird -c $GITHUB_WORKSPACE/bird.conf -p || {
+              echo "::error title=Validation Error ::Config failed validation, please check your logs"
+              exit 1
+            }
           echo "::notice title=Config Successfuly Validated ::No errors needing attentions"

@@ -24,5 +24,10 @@ jobs:
     steps:
 
       # Runs a single command using the runners shell
-      - name: Delete old backup
-        run: rm -rf /tmp/bird-back
+      - name: Delete backup
+        run: |
+          rm -rf /tmp/bird-back || {
+              echo "::error title=Failed to delete backup dir:: Check Logs"
+              exit 1
+            }
+          echo "::notice title=Backup Dir Deletion Success ::Backup dir deleted"

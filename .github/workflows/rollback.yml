@@ -25,10 +25,30 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Delete Bad Config
-        run: rm -rf /etc/bird/*
+        run: |
+          rm -rf /etc/bird/* || {
+              echo "::error title=Failed to delete bad config:: Check Logs"
+              exit 1
+            }
+          echo "::notice title=Delete success ::Bad config rollback ready"
       - name: Rolling back to backup
-        run: cp -a /tmp/bird-back/* /etc/bird
+        run: |
+          cp -a /tmp/bird-back/* /etc/bird || {
+              echo "::error title=Failed to rollback bad config:: Check Logs"
+              exit 1
+            }
+          echo "::notice title=Rollback bad config success ::Awaiting configure after ownership fix"
       - name: Fix ownership after rollback
-        run: chown -R bird /etc/bird
+        run: |
+          chown -R bird /etc/bird || {
+              echo "::error title=Failed to fix ownership:: Check Logs"
+              exit 1
+            }
+          echo "::notice title=Ownership fix success ::Configuring next"
       - name: Applying Rollback Config
-        run: birdc config
+        run: |
+          birdc config || {
+              echo "::error title=Failed to configure:: Check Logs"
+              exit 1
+            }
+          echo "::notice title=Bad config rollback success ::System Normal"
