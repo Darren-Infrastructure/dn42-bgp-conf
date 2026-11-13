@@ -31,20 +31,24 @@ jobs:
             cp /etc/bird/configs/ipv4/vars.conf $GITHUB_WORKSPACE/configs/ipv4
             cp /etc/bird/configs/ipv6/vars.conf $GITHUB_WORKSPACE/configs/ipv6
             cp /etc/bird/peers/proto_comms.conf $GITHUB_WORKSPACE/peers
+            echo "::notice title=Workflow suplemented ::All needed variable files has been copied"
             
         - name: Copy ROA files to the correct place
           run: |
             cp -r /etc/bird/roa/* $GITHUB_WORKSPACE/roa
+            echo "::notice title=Workflow suplemented ::All ROA files has been copied"
 
         - name: Remove self ibgp file
           run: |
             export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
             rm -f $GITHUB_WORKSPACE/peers/ibgp/${strip_sites}_ibgp.conf
+            echo "::notice title=IBGP Error Prevention ::Removing self IBGP to prevent loop"
 
         - name: Copy self babel file
           run: |
             export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
             cp $GITHUB_WORKSPACE/babel-configs/${strip_sites}_babel.conf $GITHUB_WORKSPACE/peers/ibgp/
+            echo "::notice title=Babel file copied ::Enrolling node in babel network"
       
   validate-config:
     # The type of runner that the job will run on
@@ -56,4 +60,6 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:   
       - name: Validating Config
-        run: cd $GITHUB_WORKSPACE && bird -c $GITHUB_WORKSPACE/bird.conf -p
+        run: |
+          cd $GITHUB_WORKSPACE && bird -c $GITHUB_WORKSPACE/bird.conf -p
+          echo "::notice title=Config Successfuly Validated ::No errors needing attentions"
