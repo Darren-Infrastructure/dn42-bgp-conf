@@ -9,13 +9,21 @@ on:
       target:
         required: true
         type: string
+      lastjob_status:
+        required: true
+        type: string
+      lastjob_deployment:
+        required: true
+        type: string
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   deploy:
     # The type of runner that the job will run on
     runs-on: ${{ inputs.target }}
-    environment: ${{ inputs.target }}
+    environment: 
+      name: ${{ inputs.target }}
+      deployment: ${{ inputs.lastjob_status == 'success' && inputs.lastjob_deployment == 'true'}}
     name: Copying config to target
     env:
       TARGET: ${{ inputs.target }}
@@ -32,7 +40,9 @@ jobs:
   
   populate-config:
     runs-on: ${{ inputs.target }}
-    environment: ${{ inputs.target }}
+    environment: 
+      name: ${{ inputs.target }}
+      deployment: ${{ inputs.lastjob_status == 'success' && inputs.lastjob_deployment == 'true'}}
     name: Populating the config
     needs: deploy
     env:
@@ -60,7 +70,9 @@ jobs:
   apply-config:
     # The type of runner that the job will run on
     runs-on: ${{ inputs.target }}
-    environment: ${{ inputs.target }}
+    environment: 
+      name: ${{ inputs.target }}
+      deployment: ${{ inputs.lastjob_status == 'success' && inputs.lastjob_deployment == 'true'}}
     name: Applying Config
     needs: populate-config
 
