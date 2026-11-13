@@ -27,9 +27,19 @@ jobs:
       # Runs a single command using the runners shell
       - name: Deploying config
         run: |
-         export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET")
-         export full_conf=$(cat $GITHUB_WORKSPACE/n3n/$strip_sites.conf && echo ' ' && cat $GITHUB_WORKSPACE/n3n/base.conf)
-         printf '%s\n' "$full_conf" > /etc/n3n/proseka.conf
+         export strip_sites=$(bash "$GITHUB_WORKSPACE/bin/strip-sites.sh" "$TARGET") || {
+              echo "::error title=Failed to determine node name:: Check Logs"
+              exit 1
+            }
+         export full_conf=$(cat $GITHUB_WORKSPACE/n3n/$strip_sites.conf && echo ' ' && cat $GITHUB_WORKSPACE/n3n/base.conf)  || {
+              echo "::error title=Failed to piece together config for $TARGET:: Check Logs"
+              exit 1
+            }
+         printf '%s\n' "$full_conf" > /etc/n3n/proseka.conf  || {
+              echo "::error title=Failed to copy config to dir:: Check Logs"
+              exit 1
+            }
+         echo "::notice title=n3n config deployed ::Deployed config $TARGET"
   
   populate-config:
     runs-on: ${{ inputs.target }}
@@ -53,11 +63,22 @@ jobs:
          s = s.replace("REPLACESUPERNODE", os.environ["SUPERNODE"])
          s = s.replace("REPLACEKEY", os.environ["KEY"])
          p.write_text(s)
-         PY
+         PY  || {
+              echo "::error title=Failed to fill in secrets:: Check Logs"
+              exit 1
+            }
+          echo "::notice title=n3n config placeholder filled in ::Ready to deploy"
       - name: Copying the script needed
         run: |
-         cp $GITHUB_WORKSPACE/bin/proseka-ipv6-conf.sh /usr/bin/proseka-ipv6-conf
-         chmod +x /usr/bin/proseka-ipv6-conf
+         cp $GITHUB_WORKSPACE/bin/proseka-ipv6-conf.sh /usr/bin/proseka-conf  || {
+              echo "::error title=Failed to copy configuration binary to dir:: Check Logs"
+              exit 1
+            }
+         chmod +x /usr/bin/proseka-conf || {
+              echo "::error title=Failed to make configuration binary executable:: Check Logs"
+              exit 1
+            }
+         echo "::notice title=Copied all needed binaries ::Ready to deploy"
         
   apply-config:
     # The type of runner that the job will run on
@@ -70,13 +91,33 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Copying service file to the systemd dir
-        run: cp $GITHUB_WORKSPACE/services/proseka-n3n.service /etc/systemd/system
+        run: |
+          cp $GITHUB_WORKSPACE/services/proseka-n3n.service /etc/systemd/system || {
+              echo "::error title=Failed to copy service file:: Check Logs"
+              exit 1
+            }
+          echo "::notice title=Copied needed services to /etc/systemd/system ::Ready to deploy"
 
       - name: Reloading Systemd Daemon
-        run: systemctl daemon-reload
+        run: |
+          systemctl daemon-reload || {
+              echo "::error title=Failed to reload systemd daemon:: Check Logs"
+              exit 1
+            }
+          echo "::notice title=Reloaded systemd ::Ready to deploy"
       
       - name: Setting up service
-        run: systemctl enable proseka-n3n
+        run: | 
+          systemctl enable proseka-n3n || {
+              echo "::error title=Failed to enable services for n3n:: Check Logs"
+              exit 1
+            }
+          echo "::notice title=Enabled systemd services for n3n ::Ready to deploy"
 
       - name: Running it
-        run: systemctl restart proseka-n3n
+        run: |
+          systemctl restart proseka-n3n || {
+              echo "::error title=Failed to start n3n service:: Check Logs"
+              exit 1
+            }
+          echo "::notice title=Started n3n services ::Deploy done"
