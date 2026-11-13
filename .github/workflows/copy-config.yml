@@ -75,7 +75,7 @@ jobs:
             -e 's/\r/%0D/g' \
             -e ':a;N;$!ba;s/\n/%0A/g')
           result=$(birdc s p 2>&1)  || {
-              echo "::error title=Failed to get current bird status:: ```$encoded_result```"
+              echo "::error title=Failed to get current bird status:: $encoded_result"
               exit 1
             }
           echo "$result"
@@ -83,4 +83,4 @@ jobs:
             -e 's/%/%25/g' \
             -e 's/\r/%0D/g' \
             -e ':a;N;$!ba;s/\n/%0A/g')
-          echo "::notice title=Applied bird configuration :: ```$encoded_result```"
+          echo "::notice title=Applied bird configuration :: $encoded_result"
