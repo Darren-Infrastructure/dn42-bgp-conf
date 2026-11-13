@@ -12,7 +12,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  deploy:
+  deploy-n3n-config:
     # The type of runner that the job will run on
     runs-on: ${{ inputs.target }}
     environment: 
@@ -46,7 +46,7 @@ jobs:
     environment: 
       name: ${{ inputs.target }}
     name: Populating the config
-    needs: deploy
+    needs: deploy-n3n-config
     env:
       SUPERNODE: ${{ vars.n3n_supernode }}
       KEY: ${{ secrets.N3N_COMM_KEY }}
